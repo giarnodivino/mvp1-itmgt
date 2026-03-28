@@ -1,0 +1,255 @@
+.checkout-page {
+  min-height: 100vh;
+  background: var(--kronos-purple);
+  color: var(--kronos-white);
+  padding: 18px 22px 32px;
+}
+
+.checkout-page__header {
+  margin-bottom: 56px;
+}
+
+.checkout-page__content {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 72px;
+  align-items: start;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.checkout-page__left {
+  padding-left: 8px;
+}
+
+.checkout-page__breadcrumb {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 28px;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.checkout-page__title {
+  margin: 0 0 24px;
+  font-size: 86px;
+}
+
+.checkout-form {
+  max-width: 640px;
+}
+
+.checkout-form__section {
+  margin-bottom: 28px;
+}
+
+.checkout-form__section h2 {
+  margin: 0 0 14px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.checkout-form__row {
+  margin-bottom: 18px;
+}
+
+.checkout-form__row--two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.checkout-form__row--three {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 18px;
+}
+
+.checkout-page__right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding-top: 120px;
+}
+
+.checkout-summary {
+  width: 100%;
+  max-width: 530px;
+  padding: 34px 34px 28px;
+}
+
+.checkout-summary__item {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 24px;
+  align-items: start;
+  margin-bottom: 28px;
+}
+
+.checkout-summary__image {
+  width: 130px;
+  height: auto;
+  object-fit: contain;
+}
+
+.checkout-summary__info {
+  text-align: right;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.checkout-summary__info h3 {
+  margin: 0;
+  font-size: 24px;
+  line-height: 1.25;
+  color: #ffffff;
+}
+
+.checkout-summary__ref {
+  margin: 4px 0 10px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.checkout-summary__sku {
+  margin: 0 0 8px;
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 14px;
+}
+
+.checkout-summary__price {
+  margin: 0 0 8px;
+  font-size: 30px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.checkout-summary__qty {
+  margin: 0;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.checkout-summary__totals {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.checkout-summary__line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  color: #ffffff;
+  font-size: 18px;
+}
+
+.checkout-summary__totals hr {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.7);
+  margin: 18px 0 16px;
+}
+
+.checkout-summary__line--total {
+  font-weight: 700;
+  font-size: 21px;
+}
+
+.checkout-page__next {
+  margin-top: 26px;
+}
+
+.checkout-page__next button {
+  border: none;
+  background: transparent;
+  color: #ffffff;
+  font-size: 28px;
+  cursor: pointer;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.checkout-page__next--mobile {
+  display: none;
+}
+
+.checkout-page__next--desktop {
+  display: block;
+}
+
+@media (max-width: 1100px) {
+  .checkout-page__content {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  .checkout-page__right {
+    align-items: flex-start;
+    padding-top: 0;
+  }
+
+  .checkout-summary {
+    max-width: 100%;
+  }
+
+  .checkout-page__next--desktop {
+    display: none;
+  }
+
+  .checkout-page__next--mobile {
+    display: block;
+  }
+
+.checkout-empty {
+  min-height: calc(100vh - 120px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  text-align: center;
+}
+
+.checkout-empty h1 {
+  margin: 0;
+  font-size: 56px;
+  font-weight: 400;
+  color: var(--kronos-white);
+  line-height: 1;
+}
+}
+
+@media (max-width: 700px) {
+  .checkout-page {
+    padding: 16px 16px 28px;
+  }
+
+  .checkout-page__header {
+    margin-bottom: 36px;
+  }
+
+  .checkout-page__title {
+    font-size: 58px;
+  }
+
+  .checkout-form__section h2 {
+    font-size: 26px;
+  }
+
+  .checkout-form__row--two,
+  .checkout-form__row--three {
+    grid-template-columns: 1fr;
+  }
+
+  .checkout-summary__item {
+    grid-template-columns: 1fr;
+  }
+
+  .checkout-summary__image {
+    width: 120px;
+  }
+
+  .checkout-summary__info {
+    text-align: left;
+  }
+}
