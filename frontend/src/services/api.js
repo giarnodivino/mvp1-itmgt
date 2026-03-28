@@ -1,5 +1,10 @@
 const API_BASE = "http://127.0.0.1:8000/api";
 
+export async function getHello() {
+  const response = await fetch(`${API_BASE}/hello/`);
+  return response.json();
+}
+
 export async function getWatches() {
   const response = await fetch(`${API_BASE}/watches/`);
   return response.json();
