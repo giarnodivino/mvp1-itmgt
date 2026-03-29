@@ -1,5 +1,7 @@
+import { Link } from "react-router";
 import KronosHeader from "../components/KronosHeader";
 import ShopNow from "./ShopNow";
+import AboutSection from "./About";
 import "./HomePage.css";
 import heroWatch from "../assets/images/hero-watch.jpg";
 
@@ -9,9 +11,10 @@ export default function HomePage() {
       <section className="home-hero">
         <div className="home-hero__overlay">
           <div className="home-hero__cta">
-            <button type="button" className="kronos-pill-outline">
+            <Link to="/shopnow" className="kronos-pill-outline home-hero__cta-link">
               Buy a Patek
-            </button>
+            </Link>
+
             <button type="button" className="kronos-pill-outline">
               Sell a Patek
             </button>
@@ -35,6 +38,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      <AboutSection /> {/* About section is underneath but ui looks ass right now */}
     </div>
   );
 }

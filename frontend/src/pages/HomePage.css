@@ -150,3 +150,28 @@
     top: 68%;
   }
 }
+
+.home-hero__cta-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 235px;
+  padding: 18px 24px;
+  font-size: 18px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+@media (max-width: 1200px) {
+  .home-hero__cta-link {
+    width: 210px;
+  }
+}
+
+@media (max-width: 900px) {
+  .home-hero__cta-link {
+    width: 190px;
+    padding: 15px 18px;
+    font-size: 16px;
+  }
+}
