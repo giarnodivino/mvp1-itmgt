@@ -1,5 +1,5 @@
-import { Link } from "react-router";
 import KronosHeader from "../components/KronosHeader";
+import ShopNow from "./ShopNow";
 import "./HomePage.css";
 import heroWatch from "../assets/images/hero-watch.jpg";
 
@@ -36,14 +36,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="home-shop-banner">
-        <h2 className="home-shop-banner__title">Shop Now</h2>
-        <div style={{ marginTop: "20px" }}>
-          <Link to="/checkout" style={{ color: "#fff", fontFamily: "Arial, Helvetica, sans-serif" }}>
-            Go to checkout prototype
-          </Link>
-        </div>
-      </section>
+      <ShopNow/>
     </div>
   );
 }

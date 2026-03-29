@@ -4,6 +4,7 @@ import WatchDetailPage from "./pages/WatchDetailPage";
 import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import OrderConfirmationPage from "./pages/OrderConfirmationPage";
+import ShopNow from "./pages/ShopNow";
 
 export default function App() {
   return (
@@ -13,6 +14,7 @@ export default function App() {
       <Route path="/cart" element={<CartPage />} />
       <Route path="/checkout" element={<CheckoutPage />} />
       <Route path="/orders/:id" element={<OrderConfirmationPage />} />
+      <Route path="/shopnow" element={<ShopNow />} />
     </Routes>
   );
 }

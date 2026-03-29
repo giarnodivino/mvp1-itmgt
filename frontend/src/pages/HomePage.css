@@ -43,7 +43,13 @@
   width: 22%;
   min-width: 260px;
   height: 100%;
-  background: rgba(238, 241, 244, 0.82);
+  background: linear-gradient(
+    90deg,
+    rgba(238, 241, 244, 0.78) 0%,
+    rgba(238, 241, 244, 0.55) 45%,
+    rgba(238, 241, 244, 0.18) 75%,
+    rgba(238, 241, 244, 0) 100%
+  );
   z-index: 1;
 }
 
@@ -79,19 +85,6 @@
   color: rgba(255, 255, 255, 0.62);
   font-size: 82px;
   text-align: right;
-}
-
-.home-shop-banner {
-  background: var(--kronos-purple);
-  padding: 36px 56px 46px;
-}
-
-.home-shop-banner__title {
-  margin: 0;
-  color: var(--kronos-white);
-  font-size: 84px;
-  line-height: 1;
-  font-weight: 400;
 }
 
 @media (max-width: 1200px) {
@@ -137,14 +130,6 @@
     font-size: 50px;
     max-width: 430px;
   }
-
-  .home-shop-banner {
-    padding: 28px 32px 34px;
-  }
-
-  .home-shop-banner__title {
-    font-size: 56px;
-  }
 }
 
 @media (max-width: 640px) {
@@ -163,9 +148,5 @@
 
   .home-hero__cta {
     top: 68%;
-  }
-
-  .home-shop-banner__title {
-    font-size: 44px;
   }
 }

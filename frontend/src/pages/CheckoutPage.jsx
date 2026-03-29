@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router";
 import { createOrder } from "../services/api";
+import KronosHeader from "../components/KronosHeader";
 import "./CheckoutPage.css";
 
 const MOCK_CART = {
@@ -52,6 +53,7 @@ export default function CheckoutPage() {
       payment_method: formData.payment_method,
       delivery_method: formData.delivery_method,
     };
+
     try {
       const order = await createOrder(payload);
       navigate(`/orders/${order.id}`);
@@ -60,37 +62,19 @@ export default function CheckoutPage() {
     }
   }
 
-  const NextButton = (
-    <button onClick={handleSubmit}>Next →</button>
-  );
-
   return (
-    <div className="checkout-page">
-      {/* ── Header ── */}
+    <div className="page-shell checkout-page">
       <div className="checkout-page__header">
-        <nav className="kronos-navbar">
-          <span className="kronos-navbar__location">⟟</span>
-          <div className="kronos-navbar__brand">KRONOS</div>
-          <div className="kronos-navbar__right">
-            <div className="kronos-navbar__search">
-              <span className="kronos-navbar__search-icon">⌕</span>
-              <input placeholder="Search" />
-            </div>
-            <button className="kronos-navbar__icon-btn">🛒</button>
-            <button className="kronos-navbar__icon-btn">☰</button>
-          </div>
-        </nav>
+        <KronosHeader />
 
         <div className="checkout-page__breadcrumb">
           <Link to="/cart">Shopping Cart</Link>
-          <span>›</span>
+          <span>‹</span>
           <span>Check-Out</span>
         </div>
       </div>
 
-      {/* ── Content grid ── */}
       <div className="checkout-page__content">
-        {/* Left column */}
         <div className="checkout-page__left">
           <h1 className="checkout-page__title">Check Out</h1>
 
@@ -173,15 +157,10 @@ export default function CheckoutPage() {
               </div>
             </div>
           </div>
-
-          <div className="checkout-page__next checkout-page__next--mobile">
-            {NextButton}
-          </div>
         </div>
 
-        {/* Right column */}
         <div className="checkout-page__right">
-          <div className="checkout-summary">
+          <div className="checkout-summary kronos-card">
             {cart.items.map((item) => (
               <div key={item.id} className="checkout-summary__item">
                 {item.watch.image_url ? (
@@ -197,7 +176,9 @@ export default function CheckoutPage() {
                 )}
 
                 <div className="checkout-summary__info">
-                  <h3>{item.watch.brand} {item.watch.model}</h3>
+                  <h3>
+                    {item.watch.brand} {item.watch.model}
+                  </h3>
                   <p className="checkout-summary__ref">{item.watch.reference_number}</p>
                   {item.watch.sku && (
                     <p className="checkout-summary__sku">SKU: {item.watch.sku}</p>
@@ -211,22 +192,26 @@ export default function CheckoutPage() {
             <div className="checkout-summary__totals">
               <div className="checkout-summary__line">
                 <span>Subtotal</span>
-                <span> ₱ {cart.subtotal}</span>
+                <span>₱ {cart.subtotal}</span>
               </div>
               <div className="checkout-summary__line">
                 <span>Shipping</span>
-                <span> ₱ {cart.shipping}</span>
+                <span>₱ {cart.shipping}</span>
               </div>
+
               <hr />
+
               <div className="checkout-summary__line checkout-summary__line--total">
                 <span>Total</span>
-                <span> ₱ {cart.total}</span>
+                <span>₱ {cart.total}</span>
               </div>
             </div>
           </div>
 
-          <div className="checkout-page__next checkout-page__next--desktop">
-            {NextButton}
+          <div className="checkout-page__next">
+            <button type="button" onClick={handleSubmit}>
+              Next <span aria-hidden="true">→</span>
+            </button>
           </div>
         </div>
       </div>
