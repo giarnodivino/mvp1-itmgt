@@ -1,133 +1,111 @@
-import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router";
-import KronosHeader from "../components/KronosHeader";
-import { getCart, createOrder } from "../services/api";
+import { useState } from "react";
+import { useNavigate, Link } from "react-router";
+import { createOrder } from "../services/api";
 import "./CheckoutPage.css";
+
+const MOCK_CART = {
+  items: [
+    {
+      id: 1,
+      watch: {
+        brand: "Tudor",
+        model: "Pelagos 39mm",
+        reference_number: "m25407n-0001",
+        sku: "185422",
+        price: "237,772.00",
+        image_url: null,
+      },
+    },
+  ],
+  subtotal: "237,772.00",
+  shipping: "100.00",
+  total: "237,872.00",
+};
 
 export default function CheckoutPage() {
   const navigate = useNavigate();
-  const [cart, setCart] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const cart = MOCK_CART;
 
   const [formData, setFormData] = useState({
     email: "",
-    firstName: "",
-    lastName: "",
-    address1: "",
-    address2: "",
+    first_name: "",
+    last_name: "",
+    address_line1: "",
+    address_line2: "",
     city: "",
     region: "",
-    zipCode: "",
-    deliveryMethod: "Standard Delivery",
+    zip_code: "",
+    payment_method: "Mock Credit Card",
+    delivery_method: "Standard Delivery",
   });
 
-  useEffect(() => {
-    async function loadCart() {
-      try {
-        const data = await getCart();
-        setCart(data);
-      } catch (error) {
-        console.error("Failed to load cart:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    loadCart();
-  }, []);
-
-  function handleChange(event) {
-    const { name, value } = event.target;
+  function handleChange(e) {
+    const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   }
 
-  const items = cart?.items ?? [];
-
-  const subtotal = useMemo(() => {
-    return items.reduce((sum, item) => {
-      const price = Number(item.watch?.price ?? item.price ?? 0);
-      const quantity = Number(item.quantity ?? 1);
-      return sum + price * quantity;
-    }, 0);
-  }, [items]);
-
-  const shipping = formData.deliveryMethod === "White-Glove Delivery" ? 1500 : 100;
-  const total = subtotal + shipping;
-
-  async function handleSubmit(event) {
-    event.preventDefault();
-
+  async function handleSubmit() {
+    const payload = {
+      full_name: `${formData.first_name} ${formData.last_name}`.trim(),
+      email: formData.email,
+      address: `${formData.address_line1}, ${formData.address_line2}, ${formData.city}, ${formData.region} ${formData.zip_code}`,
+      payment_method: formData.payment_method,
+      delivery_method: formData.delivery_method,
+    };
     try {
-      const order = await createOrder({
-        ...formData,
-        subtotal,
-        shipping,
-        total,
-      });
-
-      if (order?.id) {
-        navigate(`/orders/${order.id}`);
-        return;
-      }
-
-      console.log("Order created:", order);
-    } catch (error) {
-      console.error("Failed to create order:", error);
+      const order = await createOrder(payload);
+      navigate(`/orders/${order.id}`);
+    } catch (err) {
+      console.error("Order failed", err);
     }
   }
 
-  if (loading) {
-    return (
-      <div className="page-shell">
-        <KronosHeader />
-        <p>Loading checkout...</p>
-      </div>
-    );
-  }
-
-if (items.length === 0)
-  return (
-    <div className="page-shell">
-      <KronosHeader />
-      <div className="checkout-empty">
-        <h1>Your cart is empty.</h1>
-        <button
-          type="button"
-          className="kronos-pill"
-          onClick={() => navigate("/cart")}
-        >
-          Back to Cart
-        </button>
-      </div>
-    </div>
+  const NextButton = (
+    <button onClick={handleSubmit}>Next →</button>
   );
 
   return (
     <div className="checkout-page">
+      {/* ── Header ── */}
       <div className="checkout-page__header">
-        <KronosHeader />
+        <nav className="kronos-navbar">
+          <span className="kronos-navbar__location">⟟</span>
+          <div className="kronos-navbar__brand">KRONOS</div>
+          <div className="kronos-navbar__right">
+            <div className="kronos-navbar__search">
+              <span className="kronos-navbar__search-icon">⌕</span>
+              <input placeholder="Search" />
+            </div>
+            <button className="kronos-navbar__icon-btn">🛒</button>
+            <button className="kronos-navbar__icon-btn">☰</button>
+          </div>
+        </nav>
+
+        <div className="checkout-page__breadcrumb">
+          <Link to="/cart">Shopping Cart</Link>
+          <span>›</span>
+          <span>Check-Out</span>
+        </div>
       </div>
 
+      {/* ── Content grid ── */}
       <div className="checkout-page__content">
+        {/* Left column */}
         <div className="checkout-page__left">
-          <div className="checkout-page__breadcrumb">
-            <span>‹ Shopping Cart</span>
-            <span>‹ Check-Out</span>
-          </div>
+          <h1 className="checkout-page__title">Check Out</h1>
 
-          <h1 className="checkout-page__title section-heading-serif">Check Out</h1>
-
-          <form className="checkout-form" onSubmit={handleSubmit}>
+          <div className="checkout-form">
             <div className="checkout-form__section">
               <h2>Contact</h2>
-              <input
-                className="kronos-input"
-                type="email"
-                name="email"
-                placeholder="Email Address"
-                value={formData.email}
-                onChange={handleChange}
-              />
+              <div className="checkout-form__row">
+                <input
+                  className="kronos-input"
+                  name="email"
+                  placeholder="Email Address"
+                  value={formData.email}
+                  onChange={handleChange}
+                />
+              </div>
             </div>
 
             <div className="checkout-form__section">
@@ -136,18 +114,16 @@ if (items.length === 0)
               <div className="checkout-form__row checkout-form__row--two">
                 <input
                   className="kronos-input"
-                  type="text"
-                  name="firstName"
+                  name="first_name"
                   placeholder="First Name"
-                  value={formData.firstName}
+                  value={formData.first_name}
                   onChange={handleChange}
                 />
                 <input
                   className="kronos-input"
-                  type="text"
-                  name="lastName"
+                  name="last_name"
                   placeholder="Last Name"
-                  value={formData.lastName}
+                  value={formData.last_name}
                   onChange={handleChange}
                 />
               </div>
@@ -155,10 +131,9 @@ if (items.length === 0)
               <div className="checkout-form__row">
                 <input
                   className="kronos-input"
-                  type="text"
-                  name="address1"
+                  name="address_line1"
                   placeholder="Address Line 1"
-                  value={formData.address1}
+                  value={formData.address_line1}
                   onChange={handleChange}
                 />
               </div>
@@ -166,10 +141,9 @@ if (items.length === 0)
               <div className="checkout-form__row">
                 <input
                   className="kronos-input"
-                  type="text"
-                  name="address2"
+                  name="address_line2"
                   placeholder="Address Line 2"
-                  value={formData.address2}
+                  value={formData.address_line2}
                   onChange={handleChange}
                 />
               </div>
@@ -177,7 +151,6 @@ if (items.length === 0)
               <div className="checkout-form__row checkout-form__row--three">
                 <input
                   className="kronos-input"
-                  type="text"
                   name="city"
                   placeholder="City"
                   value={formData.city}
@@ -185,7 +158,6 @@ if (items.length === 0)
                 />
                 <input
                   className="kronos-input"
-                  type="text"
                   name="region"
                   placeholder="Region"
                   value={formData.region}
@@ -193,111 +165,68 @@ if (items.length === 0)
                 />
                 <input
                   className="kronos-input"
-                  type="text"
-                  name="zipCode"
+                  name="zip_code"
                   placeholder="ZIP Code"
-                  value={formData.zipCode}
+                  value={formData.zip_code}
                   onChange={handleChange}
                 />
               </div>
-
-              <div className="checkout-form__row">
-                <select
-                  className="kronos-select"
-                  name="deliveryMethod"
-                  value={formData.deliveryMethod}
-                  onChange={handleChange}
-                >
-                  <option>Standard Delivery</option>
-                  <option>White-Glove Delivery</option>
-                </select>
-              </div>
             </div>
+          </div>
 
-            <div className="checkout-page__next checkout-page__next--mobile">
-              <button type="submit">Next →</button>
-            </div>
-          </form>
+          <div className="checkout-page__next checkout-page__next--mobile">
+            {NextButton}
+          </div>
         </div>
 
+        {/* Right column */}
         <div className="checkout-page__right">
-          <div className="checkout-summary kronos-card">
-            {items.map((item) => {
-              const watch = item.watch ?? {};
-              const price = Number(watch.price ?? item.price ?? 0);
-              const quantity = Number(item.quantity ?? 1);
-
-              return (
-                <div className="checkout-summary__item" key={item.id ?? `${watch.id}-${quantity}`}>
+          <div className="checkout-summary">
+            {cart.items.map((item) => (
+              <div key={item.id} className="checkout-summary__item">
+                {item.watch.image_url ? (
                   <img
                     className="checkout-summary__image"
-                    src={watch.image_url || item.image_url}
-                    alt={`${watch.brand ?? ""} ${watch.model ?? ""}`.trim()}
+                    src={item.watch.image_url}
+                    alt={item.watch.model}
                   />
-
-                  <div className="checkout-summary__info">
-                    <h3>
-                      {watch.brand} {watch.model}
-                    </h3>
-
-                    {watch.reference_number && (
-                      <p className="checkout-summary__ref">{watch.reference_number}</p>
-                    )}
-
-                    {watch.sku && <p className="checkout-summary__sku">SKU: {watch.sku}</p>}
-
-                    <p className="checkout-summary__price">
-                      ₱
-                      {price.toLocaleString("en-PH", {
-                        minimumFractionDigits: 2,
-                      })}
-                    </p>
-
-                    <p className="checkout-summary__qty">Qty: {quantity}</p>
+                ) : (
+                  <div className="checkout-summary__image checkout-summary__image--placeholder">
+                    ⌚
                   </div>
+                )}
+
+                <div className="checkout-summary__info">
+                  <h3>{item.watch.brand} {item.watch.model}</h3>
+                  <p className="checkout-summary__ref">{item.watch.reference_number}</p>
+                  {item.watch.sku && (
+                    <p className="checkout-summary__sku">SKU: {item.watch.sku}</p>
+                  )}
+                  <p className="checkout-summary__price">₱{item.watch.price}</p>
+                  <button className="checkout-summary__remove">Remove</button>
                 </div>
-              );
-            })}
+              </div>
+            ))}
 
             <div className="checkout-summary__totals">
               <div className="checkout-summary__line">
                 <span>Subtotal</span>
-                <span>
-                  ₱
-                  {subtotal.toLocaleString("en-PH", {
-                    minimumFractionDigits: 2,
-                  })}
-                </span>
+                <span> ₱ {cart.subtotal}</span>
               </div>
-
               <div className="checkout-summary__line">
                 <span>Shipping</span>
-                <span>
-                  ₱
-                  {shipping.toLocaleString("en-PH", {
-                    minimumFractionDigits: 2,
-                  })}
-                </span>
+                <span> ₱ {cart.shipping}</span>
               </div>
-
               <hr />
-
               <div className="checkout-summary__line checkout-summary__line--total">
                 <span>Total</span>
-                <span>
-                  ₱
-                  {total.toLocaleString("en-PH", {
-                    minimumFractionDigits: 2,
-                  })}
-                </span>
+                <span> ₱ {cart.total}</span>
               </div>
             </div>
           </div>
 
           <div className="checkout-page__next checkout-page__next--desktop">
-            <button type="button" onClick={handleSubmit}>
-              Next →
-            </button>
+            {NextButton}
           </div>
         </div>
       </div>
