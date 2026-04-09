@@ -1,38 +1,58 @@
+
+import { Link } from "react-router";
+import KronosHeader from "../components/KronosHeader";
+import ShopNow from "./ShopNow";
+import AboutSection from "./About";
+import "./HomePage.css";
 import heroWatch from "../assets/images/hero-watch.jpg";
+import { useEffect, useState } from "react";
+import { apiRequest } from "../services/api";
+
+
 
 export default function HomePage() {
-  return (
-    <div className="homepage">
-      <section className="hero-section">
-        <div className="hero-sidebar">
-          <div className="location-mark">⟟</div>
+  const [featured, setFeatured] = useState([]);
+  const [stats, setStats] = useState({ total_watches: 0, total_sellers: 0 });
 
-          <div className="cta-group">
-            <button className="outline-btn">Buy a Patek</button>
-            <button className="outline-btn">Sell a Patek</button>
+  useEffect(() => {
+    apiRequest('landing/')
+      .then(data => {
+        setFeatured(data.featured_watches);
+        setStats(data.stats);
+      })
+      .catch(err => console.error("Error fetching landing data:", err));
+  }, []);
+
+  return (
+    <div className="home-page">
+      <section className="home-hero">
+        
+        <div className="home-hero__overlay">
+          <div className="home-hero__cta">
+            <div className="stats-banner">
+              Currently hosting {stats.total_watches} luxury timepieces.
+            </div>
+
+            <Link to="/shopnow" className="kronos-pill-outline home-hero__cta-link">
+              Buy a Patek
+            </Link>
+
+            <button type="button" className="kronos-pill-outline">
+              Sell a Patek
+            </button>
           </div>
         </div>
 
         <div
-          className="hero-main"
+          className="home-hero__bg"
           style={{ backgroundImage: `url(${heroWatch})` }}
         >
-          <header className="topbar">
-            <div className="brand">KRONOS</div>
+          <div className="home-hero__header">
+            <KronosHeader overlay />
+          </div>
 
-            <div className="topbar-right">
-              <div className="search-box">
-                <span className="search-icon">⌕</span>
-                <input type="text" placeholder="Search" />
-              </div>
-
-              <button className="icon-btn">🛒</button>
-              <button className="icon-btn">☰</button>
-            </div>
-          </header>
-
-          <div className="hero-copy">
-            <h1>
+          <div className="home-hero__content">
+            <h1 className="home-hero__copy section-heading-serif">
               Curating legacies.
               <br />
               Restoring time.
@@ -40,10 +60,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-      <section className="shop-banner">
-        <h2>Shop Now</h2>
-      </section>
+      <AboutSection /> {/* About section is underneath but ui looks ass right now */}
     </div>
   );
 }
